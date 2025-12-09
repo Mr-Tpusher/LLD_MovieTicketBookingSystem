@@ -1,7 +1,8 @@
 package com.moviebookingsystem.app.models;
 
 import com.moviebookingsystem.app.exceptions.InvalidUserNameException;
-import com.moviebookingsystem.app.utils.PasswordEncoder;
+import com.moviebookingsystem.app.exceptions.PasswordTooSimpleException;
+import com.moviebookingsystem.app.utils.PasswordUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,14 +22,22 @@ public class User extends Auditable {
 
     public void setUsername(String username) {
         if (username.length() < 2) {
-            throw new InvalidUserNameException("Username must have at least 2 chars.");
+            throw new InvalidUserNameException("Username must have at least 2 characters.");
         }
         this.username = username;
     }
 
-    public boolean verifyPassword(String password, PasswordEncoder passwordEncoder) {
+    public void setPassword(String password) {
+        if (password.length() < 8) {
+            throw  new PasswordTooSimpleException("password must have at least 8 characters.");
+        }
+
+        this.hashSaltedPassword = PasswordUtil.hashPassword(password);
+    }
+
+
+    public boolean verifyPassword(String password) {
         // verify whether provided password matches the actual user password
-        String encodedProvidedPassword = passwordEncoder.encode(password);
-        return encodedProvidedPassword.equals(this.hashSaltedPassword);
+        return PasswordUtil.verifyPassword(password, this.hashSaltedPassword);
     }
 }
