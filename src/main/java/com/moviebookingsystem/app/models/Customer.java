@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CustomerProfile extends Auditable {
+public class Customer extends Auditable {
     private String name;
     private String phone;
     private String email;
