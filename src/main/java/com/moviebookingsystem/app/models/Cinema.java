@@ -1,14 +1,19 @@
 package com.moviebookingsystem.app.models;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.*;
+
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
-public class Cinema extends Auditable {
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "cinemas")
+public class Cinema extends Exposed {
     private String name;
     private String city;
     private List<Hall> halls;

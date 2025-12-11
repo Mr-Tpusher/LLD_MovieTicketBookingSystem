@@ -1,19 +1,36 @@
 package com.moviebookingsystem.app.models;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.*;
+
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
 @Builder
-public class Show extends Auditable {
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "shows")
+public class Show extends Exposed {
+
+    @OneToOne
     private Movie movie;
     // store in utc
-    private Instant startTime;
+    private OffsetDateTime startTime;
     // store in utc
-    private Instant endTime;
+    private OffsetDateTime endTime;
 
+    @OneToOne
     private Hall hall;
+
+    private boolean isCancelled;
+
+    public boolean canShowBeBooked() {
+          return (!this.isCancelled && OffsetDateTime.now().isBefore(this.endTime));
+    }
 }
